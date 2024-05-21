@@ -26,6 +26,20 @@ class HeaderSection {
     open () {
         return browser.url('inventory.html') ;
     }
+
+    async getLogoutButton() {
+        const menuItems = await this.menuItems;
+        
+        for (const item of menuItems) {
+            const text = await item.getText();
+            if (text === 'Logout') {
+                return item;
+            }
+        }
+    
+        return null; 
+    }
+    
 }
 
 module.exports = new HeaderSection();

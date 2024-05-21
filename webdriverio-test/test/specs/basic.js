@@ -3,7 +3,8 @@ const LoginPage = require('../pageobjects/login.page')
 const InventoryPage =  require('../pageobjects/inventory.page')
 const testData =  require('../data/testData')
 const HeaderSection = require('../sections/headerSection');
-const CartPage =  require('../pageobjects/cart.page')
+const CartPage =  require('../pageobjects/cart.page');
+const footerSection = require('../sections/footerSection');
 
 
 describe('Authorization', () => {
@@ -79,8 +80,7 @@ describe('Work with cards', () => {
         
         await (await HeaderSection.buttonMenu).click();
         expect(HeaderSection.menuItems).toBeElementsArrayOfSize(4);
-        
-        await (await InventoryPage.getLogoutButton()).click();
+        await (await HeaderSection.getLogoutButton()).click();
         expect(LoginPage).toBeDisplayed();
         
         // Add assertions to ensure the username and password fields are empty after logout
@@ -101,9 +101,10 @@ describe('Work with cards', () => {
 
         await (await HeaderSection.buttonMenu).click();
         expect(HeaderSection.menuItems).toBeElementsArrayOfSize(4);
-
-        await (await InventoryPage.getLogoutButton()).click();
+        await (await HeaderSection.getLogoutButton()).click();
         expect(LoginPage).toBeDisplayed();
+
+
         expect(await LoginPage.inputUsername.getValue()).toEqual('');
         expect(await LoginPage.inputPassword.getValue()).toEqual('');
 
@@ -116,4 +117,31 @@ describe('Work with cards', () => {
         expect(CartPage.cartItem).toBeElementsArrayOfSize(newBadgeCount);
 
     });
+
+    it('Should sorting products', async () => {
+    expect(InventoryPage).toBeDisplayed();
+
+    const sortContainer = await InventoryPage.sortContainer;
+    expect(sortContainer).toBeClickable();
+    console.log('Sort container:', sortContainer); // Log the sort container element
+
+    await sortContainer.waitForClickable(); // Wait for the sort container to become clickable
+    await sortContainer.click(); // Attempt to click on the sort container
+
+    expect(InventoryPage.optionValuesSortContainer).toBeElementsArrayOfSize(4);
+
+    const value = 'az'; // Define the value you want to pass
+    const azOption = await InventoryPage.specificOptionElement(value);
+    azOption.click();
+    expect(await InventoryPage.compareProductItemTitlesInOrder()).toBeTruthy(); // Ensure to await the result of compareProductItemTitlesInOrder()
+});
+
+    it('Should redirect to  company`s social medias', async() => {
+        expect(InventoryPage).toBeDisplayed();
+        await footerSection.twitterButton.click();
+        await expect(browser.getUrl).toBe('https://x.com/saucelabs');
+        
+    })
+
+    
 });

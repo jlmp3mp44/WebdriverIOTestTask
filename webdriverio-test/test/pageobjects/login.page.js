@@ -10,11 +10,11 @@ class LoginPage extends Page {
     }
 
     get inputPassword () {
-        return $('[id="password"]');
+        return $('#password');
     }
 
     get btnSubmit () {
-        return $('[id="login-button"]');
+        return $('#login-button');
     }
 
     get errorMessage(){
