@@ -4,7 +4,7 @@ const InventoryPage =  require('../pageobjects/inventory.page')
 const testData =  require('../data/testData')
 const HeaderSection = require('../sections/headerSection');
 const CartPage =  require('../pageobjects/cart.page');
-const footerSection = require('../sections/footerSection');
+const FooterSection = require('../sections/footerSection');
 
 
 describe('Authorization', () => {
@@ -138,9 +138,23 @@ describe('Work with cards', () => {
 
     it('Should redirect to  company`s social medias', async() => {
         expect(InventoryPage).toBeDisplayed();
-        await footerSection.twitterButton.click();
-        await expect(browser.getUrl).toBe('https://x.com/saucelabs');
+
+        const url =  await browser.getUrl();
+        await FooterSection.twitterButton.click();
+        await browser.switchWindow(testData.socialMedias.twitter);
+        await expect(browser).toHaveUrl(testData.socialMedias.twitter);
+        await browser.switchWindow(url);
+
+        await FooterSection.facebookButton.click();
+        await browser.switchWindow(testData.socialMedias.facebook);
+        await expect(browser).toHaveUrl(testData.socialMedias.facebook);
+        await browser.switchWindow(url);
+
+        await FooterSection.linkedinButton.click();
+        await browser.switchWindow(testData.socialMedias.linkedin);
+        await expect(browser).toHaveUrl(testData.socialMedias.linkedin);
         
+
     })
 
     
