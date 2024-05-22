@@ -6,6 +6,7 @@ exports.config = {
     // WebdriverIO supports running e2e tests as well as unit and component tests.
     baseUrl: 'https://www.saucedemo.com/',
     runner: 'local',
+    sync: true,
     //
     // ==================
     // Specify Test Files

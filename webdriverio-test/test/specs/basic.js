@@ -74,6 +74,7 @@ describe('Work with cards', () => {
         await LoginPage.open();
         await LoginPage.login(testData.validCredentials.username, testData.validCredentials.password);
     });
+
     it('Should logout', async () => {
 
         expect(InventoryPage).toBeDisplayed();
@@ -87,17 +88,23 @@ describe('Work with cards', () => {
         expect(await LoginPage.inputUsername.getValue()).toEqual('');
         expect(await LoginPage.inputPassword.getValue()).toEqual('');
     });
-    it('Should save card after logout', async () => {
+    
+    it('Should save cart after logout', async () => {
         expect(InventoryPage).toBeDisplayed();
-    
-        const numOfBadge = await HeaderSection.getBadgeCount();
-    
-        (await InventoryPage.buttonAddToCart).click(); // Corrected this line
-        const newBadgeCount = await HeaderSection.getBadgeCount();
-        expect(newBadgeCount).toEqual(numOfBadge + 1);
 
-        (await HeaderSection.buttonShopCart).click();
-        expect(CartPage.cartItem).toBeElementsArrayOfSize(newBadgeCount);
+        const indicesToAdd = [1, 2, 3]; 
+        const productTitles = [];
+    
+        const initialBadgeCount = await HeaderSection.getBadgeCount();
+    
+        for (const index of indicesToAdd) {
+            await (await InventoryPage.buttonAddToCart(index)).click();
+            const productTitle = await InventoryPage.getItemTitle(index);
+            productTitles.push(await productTitle.getText());
+        }
+       
+        const newBadgeCount = await HeaderSection.getBadgeCount();
+        expect(newBadgeCount).toEqual(initialBadgeCount + indicesToAdd.length);
 
         await (await HeaderSection.buttonMenu).click();
         expect(HeaderSection.menuItems).toBeElementsArrayOfSize(4);
@@ -113,8 +120,11 @@ describe('Work with cards', () => {
         expect(InventoryPage.inventoryItem).toBeDisplayed();
         expect(HeaderSection.buttonShopCart).toBeDisplayed();
 
-        (await HeaderSection.buttonShopCart).click();
-        expect(CartPage.cartItem).toBeElementsArrayOfSize(newBadgeCount);
+        await (await HeaderSection.buttonShopCart).click();
+        expect(CartPage.cartItems).toBeElementsArrayOfSize(newBadgeCount);
+        for (const title of productTitles) {
+            expect(await CartPage.getCartItemByTitle(title)).toBeDisplayed();
+        }
 
     });
 
@@ -123,9 +133,6 @@ describe('Work with cards', () => {
 
     const sortContainer = await InventoryPage.sortContainer;
     expect(sortContainer).toBeClickable();
-    console.log('Sort container:', sortContainer); // Log the sort container element
-
-    await sortContainer.waitForClickable(); // Wait for the sort container to become clickable
     await sortContainer.click(); // Attempt to click on the sort container
 
     expect(InventoryPage.optionValuesSortContainer).toBeElementsArrayOfSize(4);

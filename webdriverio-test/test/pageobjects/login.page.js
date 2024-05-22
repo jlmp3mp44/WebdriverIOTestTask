@@ -38,17 +38,17 @@ class LoginPage extends Page {
     }
 
     async isUsernameFieldHighlighted() {
-        return (await this.inputUsername.getAttribute('class')).includes('input_error');
+        return (await this.inputUsername.getAttribute('class')).includes('error');
     }
 
     async isPasswordFieldHighlighted() {
-        return (await this.inputPassword.getAttribute('class')).includes('input_error');
+        return (await this.inputPassword.getAttribute('class')).includes('error');
     }
 
     async login(username, password) {
         await this.setUsername(username);
         await this.setPassword(password);
-        await (await this.btnSubmit).click();
+        await this.btnSubmit.click();
     }
 
 
