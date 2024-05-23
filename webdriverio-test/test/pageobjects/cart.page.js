@@ -6,7 +6,11 @@ const HeaderSection = require('../sections/headerSection');
 class CartPage extends Page {
 
     get cartItem(){
-        return $$('.cart_item')
+        return $$('.cart_item');
+    }
+
+    get checkoutButton(){
+        return $('[data-test=checkout]');
     }
 
     async getCartItemByTitle(title) {
