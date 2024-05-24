@@ -1,7 +1,5 @@
 const { $ } = require('@wdio/globals')
 const Page = require('./page');
-const InventoryPage = require('../pageobjects/inventory.page');
-
 
 class LoginPage extends Page {
     

@@ -1,7 +1,5 @@
 const { $ } = require('@wdio/globals')
 const Page = require('./page');
-const HeaderSection = require('../sections/headerSection');
-
 
 class InventoryPage extends Page {
     
@@ -19,6 +17,10 @@ class InventoryPage extends Page {
     
     get optionValuesSortContainer() {
         return `${this.sortContainer.selector} option`;
+    }
+
+    get removeButton(){
+        return $$('[data-test*=remove]');
     }
     
 
@@ -70,16 +72,6 @@ class InventoryPage extends Page {
         await this.sortContainer.click();
         const optionElement = await $(`.product_sort_container option[value="${value}"]`);
         return optionElement;
-    }
-
-    
-    async isFieldTitlePresent(){
-        (await this.fieldTitle).waitForDisplayed;
-        return (await this.fieldTitle).isDisplayed;
-    }
-
-    async gettitleProductsText() {
-        return await this.titleProducts.getText();
     }
 
     open () {

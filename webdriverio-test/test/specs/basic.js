@@ -8,48 +8,11 @@ const FooterSection = require('../sections/footerSection');
 const CheckoutPage =  require('../pageobjects/checkout.page')
 const OverviewPage =  require('../pageobjects/overview.page');
 const CheckoutCompletePage = require('../pageobjects/checkoutComplete.page');
-
-
-function isAscending(arr) {
-    for (let i = 1; i < arr.length; i++) {
-      if (arr[i - 1].localeCompare(arr[i]) > 0) {
-        return false;
-      }
-    }
-    return true;
-  }
-
-  function isAscendingPrice(arr) {
-    for (let i = 1; i < arr.length; i++) {
-        if (arr[i - 1] > arr[i]) {
-            return false;
-        }
-    }
-    return true;
-}
-  
-  function isDescending(arr) {
-    for (let i = 1; i < arr.length; i++) {
-      if (arr[i - 1].localeCompare(arr[i]) < 0) {
-        return false;
-      }
-    }
-    return true;
-  }
-  function isDescendingPrice(arr) {
-    for (let i = 1; i < arr.length; i++) {
-        if (arr[i - 1] < arr[i]) {
-            return false;
-        }
-    }
-    return true;
-}
-
-
+const { isAscending, isDescending, isAscendingPrice, isDescendingPrice } = require('../data/utils');
 
 
 describe('Authorization', () => {
-    xit('Should login with valid credentials', async () => {
+    it('Valid login', async () => {
         await LoginPage.open();
 
         await LoginPage.setUsername(testData.validCredentials.username);
@@ -62,12 +25,12 @@ describe('Authorization', () => {
 
         await (await LoginPage.btnSubmit).click();
         
-        const titleText = await InventoryPage.gettitleProductsText(); 
+        const titleText = await InventoryPage.titleProducts.getText(); 
         expect(titleText).toEqual(testData.titles.inventoryTitle);
         
     });
 
-    xit("Shouldn`t login with invalid password", async() => {
+    it("Login with invalid password", async() => {
         await LoginPage.open();
 
         await LoginPage.setUsername(testData.validCredentials.username);
@@ -88,7 +51,7 @@ describe('Authorization', () => {
         
     })
 
-    xit("Shouldn`t login with invalid login", async() => {
+    it("Login with invalid login", async() => {
         await LoginPage.open();
 
         await LoginPage.setUsername(testData.invalidCredentials.username);
@@ -116,20 +79,32 @@ describe('Work with cards', () => {
         await LoginPage.login(testData.validCredentials.username, testData.validCredentials.password);
     });
 
-    xit('Should logout', async () => {
+    afterEach(async () => {
+        await InventoryPage.open();
+        const removeButtons = await InventoryPage.removeButton;
+        if (removeButtons.length > 0) {
+            for (const removeButton of removeButtons) {
+                if (await removeButton.isDisplayed()) {
+                    await removeButton.click();
+                }
+            }
+        }
+    });
+
+    it('Logout', async () => {
 
         await expect(InventoryPage.titleProducts).toBeDisplayed();
         
         await (await HeaderSection.buttonMenu).click();
         expect(HeaderSection.menuItems).toBeElementsArrayOfSize(4);
-        await (await HeaderSection.getLogoutButton()).click();
+        (await HeaderSection.logoutButton).click();
         expect(LoginPage).toBeDisplayed();
         
         expect(await LoginPage.inputUsername.getValue()).toEqual('');
         expect(await LoginPage.inputPassword.getValue()).toEqual('');
     });
     
-    xit('Should save cart after logout', async () => {
+    it('Saving the card after logout ', async () => {
         await expect(InventoryPage.titleProducts).toBeDisplayed();
 
         const indicesToAdd = [1, 2]; 
@@ -148,7 +123,7 @@ describe('Work with cards', () => {
 
         await (await HeaderSection.buttonMenu).click();
         expect(HeaderSection.menuItems).toBeElementsArrayOfSize(4);
-        await (await HeaderSection.getLogoutButton()).click();
+        (await HeaderSection.logoutButton).click();
         expect(LoginPage).toBeDisplayed();
 
 
@@ -168,7 +143,7 @@ describe('Work with cards', () => {
 
     });
 
-    it('Should sort products', async () => {
+    it('Sorting', async () => {
         
         await expect(InventoryPage.titleProducts).toBeDisplayed();
     
@@ -200,25 +175,28 @@ describe('Work with cards', () => {
     });
     
 
-    it('Should redirect to  company`s social medias', async() => {
+    it('Footer Links', async() => {
         await expect(InventoryPage.titleProducts).toBeDisplayed();
         const url =  await browser.getUrl();
         await FooterSection.twitterButton.click();
         await browser.switchWindow(testData.socialMedias.twitter);
         await expect(browser).toHaveUrl(testData.socialMedias.twitter);
+        await expect(browser.$('//span[text() = "Sauce Labs"]')).toBeDisplayed();
         await browser.switchWindow(url);
 
         await FooterSection.facebookButton.click();
         await browser.switchWindow(testData.socialMedias.facebook);
         await expect(browser).toHaveUrl(testData.socialMedias.facebook);
+        await expect(browser.$('//h1[text() = "Sauce Labs"]')).toBeDisplayed();
         await browser.switchWindow(url);
 
         await FooterSection.linkedinButton.click();
         await browser.switchWindow(testData.socialMedias.linkedin);
         await expect(browser).toHaveUrl(testData.socialMedias.linkedin);
+        //await expect(browser.$('//h1[text() = "Sauce Labs"]')).toBeExisting();
     })
 
-    it('Should check that checkout is valid', async () => {
+    it('Valid Checkout', async () => {
         await expect(InventoryPage.titleProducts).toBeDisplayed();
 
         const indexesToAdd = [1]; 

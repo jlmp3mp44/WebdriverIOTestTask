@@ -1,7 +1,5 @@
 const { $ } = require('@wdio/globals')
 const Page = require('./page');
-const HeaderSection = require('../sections/headerSection');
-
 
 class CartPage extends Page {
 
