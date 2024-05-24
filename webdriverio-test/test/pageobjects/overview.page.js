@@ -13,6 +13,10 @@ class OverviewPage extends Page {
         return $$('.cart_item');
     }
 
+    get finishButton(){
+        return $('[data-test=finish]');
+    }
+
     async totalPrice(){
         const priceElement = $('[data-test*="subtotal"]');
         const priceText = await priceElement.getText();
@@ -21,7 +25,7 @@ class OverviewPage extends Page {
         const price = priceMatch ? parseFloat(priceMatch[1]) : null;
         console.log("PRICEPRICEPRICEPRICE" + price)
         return price;
-        }
+    }
 
     async getItemByTitle(title) {
         return $(`//div[@class="inventory_item_name" and text()="${title}"]`);
