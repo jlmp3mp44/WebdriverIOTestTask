@@ -8,7 +8,7 @@ const FooterSection = require('../sections/footerSection');
 const CheckoutPage =  require('../pageobjects/checkout.page')
 const OverviewPage =  require('../pageobjects/overview.page');
 const CheckoutCompletePage = require('../pageobjects/checkoutComplete.page');
-const { isAscending, isDescending, isAscendingPrice, isDescendingPrice} = require('../data/utils');
+const { isAscending, isDescending, isAscendingPrice, isDescendingPrice} = require('../utils/utils');
 const { checkSocialMedia } = require('./footerLinks'); 
 
 describe('Authorization', () => {
