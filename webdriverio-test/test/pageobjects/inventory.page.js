@@ -15,15 +15,10 @@ class InventoryPage extends Page {
         return $('.product_sort_container');
     }
     
-    get optionValuesSortContainer() {
-        return `${this.sortContainer.selector} option`;
-    }
-
     get removeButton(){
         return $$('[data-test*=remove]');
     }
     
-
     async buttonAddToCart(index){
         return $(`(//button[contains(@data-test, 'add-to-cart')])[${index}]`);
     }

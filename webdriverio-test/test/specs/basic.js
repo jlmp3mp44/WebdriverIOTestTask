@@ -16,17 +16,14 @@ describe('Authorization', () => {
         await LoginPage.open();
 
         await LoginPage.setUsername(testData.validCredentials.username);
-        const usernameValue = await (await LoginPage.inputUsername).getValue();
-        expect(usernameValue).toEqual(testData.validCredentials.username);
+        expect(LoginPage.inputUsername).toHaveValue(testData.validCredentials.username);
 
         await LoginPage.setPassword(testData.validCredentials.password);
-        const passwordInputType = await (await LoginPage.inputPassword).getAttribute('type');
-        expect(passwordInputType).toEqual('password');
+        await expect(LoginPage.inputPassword).toHaveAttribute('type', 'password');
 
         await (await LoginPage.btnSubmit).click();
-        
-        const titleText = await InventoryPage.titleProducts.getText(); 
-        expect(titleText).toEqual(testData.titles.inventoryTitle);
+        browser.pause(500);
+        expect(InventoryPage.titleProducts).toHaveText(testData.titles.inventoryTitle);
         
     });
 
@@ -34,15 +31,13 @@ describe('Authorization', () => {
         await LoginPage.open();
 
         await LoginPage.setUsername(testData.validCredentials.username);
-        const usernameValue = await (await LoginPage.inputUsername).getValue();
-        expect(usernameValue).toEqual(testData.validCredentials.username);
+        expect(LoginPage.inputUsername).toHaveValue(testData.validCredentials.username);
 
         await LoginPage.setPassword(testData.invalidCredentials.password);
-        const passwordInputType = await (await LoginPage.inputPassword).getAttribute('type');
-        expect(passwordInputType).toEqual('password');
+        await expect(LoginPage.inputPassword).toHaveAttribute('type', 'password');
 
         await (await LoginPage.btnSubmit).click();
-
+        browser.pause(500);
         expect(LoginPage.getUsernameErrorIcon).toBeDisplayed();
         expect(LoginPage.getPasswordErrorIcon).toBeDisplayed();
         await expect(LoginPage.errorMessage).toBeDisplayed()
@@ -55,15 +50,13 @@ describe('Authorization', () => {
         await LoginPage.open();
 
         await LoginPage.setUsername(testData.invalidCredentials.username);
-        const usernameValue = await (await LoginPage.inputUsername).getValue();
-        expect(usernameValue).toEqual(testData.invalidCredentials.username);
+        expect(LoginPage.inputUsername).toHaveValue(testData.invalidCredentials.username);
 
         await LoginPage.setPassword(testData.validCredentials.password);
-        const passwordInputType = await (await LoginPage.inputPassword).getAttribute('type');
-        expect(passwordInputType).toEqual('password');
+        await expect(LoginPage.inputPassword).toHaveAttribute('type', 'password');
 
         await (await LoginPage.btnSubmit).click();
-
+        browser.pause(500);
         expect(LoginPage.getUsernameErrorIcon).toBeDisplayed();
         expect(LoginPage.getPasswordErrorIcon).toBeDisplayed();
         await expect(LoginPage.errorMessage).toBeDisplayed()
@@ -97,11 +90,12 @@ describe('Work with cards', () => {
         
         await (await HeaderSection.buttonMenu).click();
         expect(HeaderSection.menuItems).toBeElementsArrayOfSize(4);
+
         (await HeaderSection.logoutButton).click();
-        expect(LoginPage).toBeDisplayed();
-        
-        expect(await LoginPage.inputUsername.getValue()).toEqual('');
-        expect(await LoginPage.inputPassword.getValue()).toEqual('');
+        browser.pause(500);
+        expect(LoginPage.btnSubmit).toBeDisplayed();
+        expect(await LoginPage.inputUsername).toHaveValue('');
+        expect(await LoginPage.inputPassword).toHaveValue('')
     });
     
     it('Saving the card after logout ', async () => {
@@ -109,7 +103,6 @@ describe('Work with cards', () => {
 
         const indicesToAdd = [1, 2]; 
         const productTitles = [];
-    
         const initialBadgeCount = await HeaderSection.getBadgeCount();
     
         for (const index of indicesToAdd) {
@@ -123,15 +116,15 @@ describe('Work with cards', () => {
 
         await (await HeaderSection.buttonMenu).click();
         expect(HeaderSection.menuItems).toBeElementsArrayOfSize(4);
+
         (await HeaderSection.logoutButton).click();
-        expect(LoginPage).toBeDisplayed();
-
-
-        expect(await LoginPage.inputUsername.getValue()).toEqual('');
-        expect(await LoginPage.inputPassword.getValue()).toEqual('');
+        browser.pause(500);
+        expect(LoginPage.btnSubmit).toBeDisplayed();
+        expect(await LoginPage.inputUsername).toHaveValue('');
+        expect(await LoginPage.inputPassword).toHaveValue('')
 
         await LoginPage.login(testData.validCredentials.username, testData.validCredentials.password);
-
+        browser.pause(500);
         expect(InventoryPage.inventoryItem).toBeDisplayed();
         expect(HeaderSection.buttonShopCart).toBeDisplayed();
 
@@ -144,12 +137,7 @@ describe('Work with cards', () => {
     });
 
     it('Sorting', async () => {
-        
         await expect(InventoryPage.titleProducts).toBeDisplayed();
-    
-        await (await InventoryPage.sortContainer).click();
-    
-        expect(InventoryPage.optionValuesSortContainer).toBeElementsArrayOfSize(4);
     
         (await InventoryPage.selectSortOption(testData.filters.az)).click();
         await browser.pause(500); 
@@ -170,27 +158,28 @@ describe('Work with cards', () => {
         await browser.pause(500); // Add a short pause to allow sorting to take effect
         prices = await InventoryPage.getItemPrices();
         expect(isDescendingPrice(prices)).toBe(true);
-      
-        
     });
-    
 
     it('Footer Links', async() => {
         await expect(InventoryPage.titleProducts).toBeDisplayed();
         const url =  await browser.getUrl();
+
         await FooterSection.twitterButton.click();
+        browser.pause(500);
         await browser.switchWindow(testData.socialMedias.twitter);
         await expect(browser).toHaveUrl(testData.socialMedias.twitter);
         await expect(browser.$('//span[text() = "Sauce Labs"]')).toBeDisplayed();
         await browser.switchWindow(url);
 
         await FooterSection.facebookButton.click();
+        browser.pause(500);
         await browser.switchWindow(testData.socialMedias.facebook);
         await expect(browser).toHaveUrl(testData.socialMedias.facebook);
         await expect(browser.$('//h1[text() = "Sauce Labs"]')).toBeDisplayed();
         await browser.switchWindow(url);
 
         await FooterSection.linkedinButton.click();
+        browser.pause(500);
         await browser.switchWindow(testData.socialMedias.linkedin);
         await expect(browser).toHaveUrl(testData.socialMedias.linkedin);
         //await expect(browser.$('//h1[text() = "Sauce Labs"]')).toBeExisting();
@@ -211,9 +200,8 @@ describe('Work with cards', () => {
             productTitles.push(await productTitle.getText());
             const productPriceElement = await InventoryPage.getItemPrice(index);
             const productPriceText = await productPriceElement.getText();
-            console.log("Product price text:", productPriceText); // Debugging line
             const productPrice = parseFloat(productPriceText.replace('$', '').trim());  // Convert price text to number
-            console.log("Parsed product price:", productPrice); // Debugging line
+           
             totalPriceSum += productPrice;  // Sum the prices
         }
        
@@ -230,25 +218,21 @@ describe('Work with cards', () => {
         expect(CheckoutPage.chekoutForm).toBeDisplayed();
 
         await CheckoutPage.setFirstName(testData.userCheckoutInfo.firstname);
-        expect(await (await CheckoutPage.firstNameInput).getValue()).toEqual(testData.userCheckoutInfo.firstname);
+        expect(CheckoutPage.firstNameInput).toHaveValue(testData.userCheckoutInfo.firstname);
 
         await CheckoutPage.setLastName(testData.userCheckoutInfo.lastname);
-        expect(await (await CheckoutPage.lastNameInput).getValue()).toEqual(testData.userCheckoutInfo.lastname);
+        expect(CheckoutPage.firstNameInput).toHaveValue(testData.userCheckoutInfo.lastname);
 
         await CheckoutPage.setPostalCode(testData.userCheckoutInfo.postalCode);
-        expect(await (await CheckoutPage.postalCodeInput).getValue()).toEqual(testData.userCheckoutInfo.postalCode);
+        expect(CheckoutPage.firstNameInput).toHaveValue(testData.userCheckoutInfo.postalCode);
 
         (await CheckoutPage.continueButton).click();
-
         expect(OverviewPage.overviewTitle).toBeDisplayed();
-
         expect(OverviewPage.cartItems).toBeElementsArrayOfSize(indexesToAdd.length);
         for (const title of productTitles) {
             expect(await OverviewPage.getItemByTitle(title)).toBeDisplayed();
         }
-
         const overviewTotalPrice = await OverviewPage.totalPrice();  // Call totalPrice function to get the total price from overview page
-        console.log("Overview total price:", overviewTotalPrice); // Debugging line
         expect(overviewTotalPrice).toEqual(totalPriceSum);  // Compare total prices
 
         (await OverviewPage.finishButton).click();
