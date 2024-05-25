@@ -11,6 +11,7 @@ class FooterSection {
     get linkedinButton(){
         return $('[data-test*=linkedin]')
     }
+
 }
 
 module.exports = new FooterSection();

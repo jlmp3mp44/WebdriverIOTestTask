@@ -24,9 +24,19 @@ function isDescendingPrice(arr) {
     return isSorted(arr, (a, b) => b - a);
 }
 
+function checkSocialMedia(button, expectedUrl, expectedElementSelector) {
+    button.click();
+    browser.pause(500);
+    browser.switchWindow(expectedUrl);
+    expect(browser).toHaveUrl(expectedUrl);
+    expect(browser.$(expectedElementSelector)).toBeDisplayed();
+    browser.switchWindow("");
+}
+
 module.exports = {
     isAscending,
     isDescending,
     isAscendingPrice,
-    isDescendingPrice
+    isDescendingPrice,
+    checkSocialMedia
 };

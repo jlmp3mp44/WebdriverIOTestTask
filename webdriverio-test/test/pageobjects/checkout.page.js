@@ -2,7 +2,7 @@ const { $ } = require('@wdio/globals')
 const Page = require('./page');
 
 class CheckoutPage extends Page {
-
+  
     get chekoutForm(){
         return $('//div[@class="checkout_info"]');
     }
@@ -22,7 +22,7 @@ class CheckoutPage extends Page {
     get continueButton(){
         return $('[data-test=continue]');
     }
-
+    //Set values to the inputs
     async setFirstName(firstName){
         await this.firstNameInput.setValue(firstName);
     }

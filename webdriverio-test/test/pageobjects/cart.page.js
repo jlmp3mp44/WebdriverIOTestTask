@@ -2,7 +2,7 @@ const { $ } = require('@wdio/globals')
 const Page = require('./page');
 
 class CartPage extends Page {
-
+    
     get cartTitle(){
         return $('//span[contains(text(), "Cart")]');
     }
@@ -19,6 +19,7 @@ class CartPage extends Page {
         return $('//[contains(text(), "Cart is empty")]');
     }
 
+    //Get item from Cart by title
     async getCartItemByTitle(title) {
         return $(`//div[@class="inventory_item_name" and text()="${title}"]`);
     }

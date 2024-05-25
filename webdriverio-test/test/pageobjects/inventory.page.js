@@ -2,7 +2,7 @@ const { $ } = require('@wdio/globals')
 const Page = require('./page');
 
 class InventoryPage extends Page {
-    
+
     get titleProducts () {
         return  $('[data-test="title"]');
     }
@@ -19,18 +19,20 @@ class InventoryPage extends Page {
         return $$('[data-test*=remove]');
     }
     
+    // get button "add to cart" for specific item
     async buttonAddToCart(index){
         return $(`(//button[contains(@data-test, 'add-to-cart')])[${index}]`);
     }
 
+    // get title of specific item
     async getItemTitle(index){
         return $(`(//*[@data-test="inventory-item-name"])[${index}]`);
     }
-
+     // get price of specific item
     async getItemPrice(index){
         return $(`(//*[@data-test="inventory-item-price"])[${index}]`)
     }
-
+    //get titles of all items
     async getItemTitles() {
         try {
             const elements = await $$('[data-test="inventory-item-name"]');
@@ -45,7 +47,7 @@ class InventoryPage extends Page {
             throw error;
         }
     }
-    
+    //get prices of all items
     async getItemPrices() {
         try {
             const elements = await $$('[data-test="inventory-item-price"]');
@@ -62,7 +64,7 @@ class InventoryPage extends Page {
         }
     }
     
-
+    //get specific sort option
     async selectSortOption(value) {
         await this.sortContainer.click();
         const optionElement = await $(`.product_sort_container option[value="${value}"]`);

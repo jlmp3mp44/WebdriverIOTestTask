@@ -1,4 +1,5 @@
 class HeaderSection {
+
     get buttonMenu(){
         return $('[id*="menu-btn"]');
     }
@@ -18,7 +19,7 @@ class HeaderSection {
     get logoutButton(){
         return $('[data-test*="logout"]')
     }
-
+    //get number of items in the cart on near to cart button
     async getBadgeCount() {
         const badgeElement = await this.buttonBadge;
         if (await badgeElement.isDisplayed()) {

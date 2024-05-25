@@ -14,7 +14,7 @@ class OverviewPage extends Page {
     get finishButton(){
         return $('[data-test=finish]');
     }
-
+    //get full price for order
     async totalPrice(){
         const priceElement = $('[data-test*="subtotal"]');
         const priceText = await priceElement.getText();

@@ -2,7 +2,7 @@ const { $ } = require('@wdio/globals')
 const Page = require('./page');
 
 class LoginPage extends Page {
-    
+
     get inputUsername () {
         return $('[data-test="username"]');
     }
@@ -19,6 +19,7 @@ class LoginPage extends Page {
         return $('[data-test = "error"]')
     }
 
+    //get error icon near to inputs
     async getUsernameErrorIcon() {
         return this.inputUsername.$('~ svg.error_icon');
     }
@@ -26,7 +27,7 @@ class LoginPage extends Page {
     async getPasswordErrorIcon() {
         return this.inputPassword.$('~ svg.error_icon');
     }
-    
+    //set values to the inputs
     async setUsername(username){
         await this.inputUsername.setValue(username);
     }
@@ -34,7 +35,7 @@ class LoginPage extends Page {
     async setPassword(password){
         (await this.inputPassword).setValue(password);
     }
-
+    //get are fields highlighted with red
     async isUsernameFieldHighlighted() {
         return (await this.inputUsername.getAttribute('class')).includes('error');
     }
