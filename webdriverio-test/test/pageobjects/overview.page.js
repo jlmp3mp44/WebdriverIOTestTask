@@ -28,6 +28,10 @@ class OverviewPage extends Page {
         return $(`//div[@class="inventory_item_name" and text()="${title}"]`);
     }
 
+    async finishOrder(){
+        (await this.finishButton).click();
+    }
+
     open () {
         return browser.url('checkout-step-two.html')
     }

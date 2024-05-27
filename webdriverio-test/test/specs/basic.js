@@ -21,8 +21,7 @@ describe('Authorization', () => {
         await LoginPage.setPassword(testData.validCredentials.password);
         await expect(LoginPage.inputPassword).toHaveAttribute('type', 'password');
 
-        await (await LoginPage.btnSubmit).click();
-        browser.pause(500);
+        await LoginPage.submit();
         expect(InventoryPage.titleProducts).toHaveText(testData.titles.inventoryTitle);
         
     });
@@ -36,8 +35,7 @@ describe('Authorization', () => {
         await LoginPage.setPassword(testData.invalidCredentials.password);
         await expect(LoginPage.inputPassword).toHaveAttribute('type', 'password');
 
-        await (await LoginPage.btnSubmit).click();
-        browser.pause(500);
+        await LoginPage.submit();
         //check that error icons are present
         expect(LoginPage.getUsernameErrorIcon).toBeDisplayed(); 
         expect(LoginPage.getPasswordErrorIcon).toBeDisplayed();
@@ -57,8 +55,7 @@ describe('Authorization', () => {
         await LoginPage.setPassword(testData.validCredentials.password);
         await expect(LoginPage.inputPassword).toHaveAttribute('type', 'password');
 
-        await (await LoginPage.btnSubmit).click();
-        browser.pause(500);
+        await LoginPage.submit();
         //check that error icons are present
         expect(LoginPage.getUsernameErrorIcon).toBeDisplayed();
         expect(LoginPage.getPasswordErrorIcon).toBeDisplayed();
@@ -93,11 +90,10 @@ describe('Work with cards', () => {
 
         await expect(InventoryPage.titleProducts).toBeDisplayed();
         
-        await (await HeaderSection.buttonMenu).click();
+        await HeaderSection.openMenu();
         expect(HeaderSection.menuItems).toBeElementsArrayOfSize(4);
 
-        (await HeaderSection.logoutButton).click();
-        browser.pause(500);
+        await HeaderSection.logout();
         expect(LoginPage.btnSubmit).toBeDisplayed();
         //check that input fields are empty
         expect(await LoginPage.inputUsername).toHaveValue('');
@@ -112,7 +108,7 @@ describe('Work with cards', () => {
         const initialBadgeCount = await HeaderSection.getBadgeCount();
         //loop to add items to the cart
         for (const index of indixesToAdd) {
-            await (await InventoryPage.buttonAddToCart(index)).click();
+            await InventoryPage.addToCart(index);
             const itemTitle = await InventoryPage.getItemTitle(index);
             itemsTitles.push(await itemTitle.getText());
         }
@@ -120,22 +116,20 @@ describe('Work with cards', () => {
         const newBadgeCount = await HeaderSection.getBadgeCount();
         expect(newBadgeCount).toEqual(initialBadgeCount + indixesToAdd.length);
 
-        await (await HeaderSection.buttonMenu).click();
+        await HeaderSection.openMenu();
         expect(HeaderSection.menuItems).toBeElementsArrayOfSize(4);
 
-        (await HeaderSection.logoutButton).click();
-        browser.pause(500);
+        HeaderSection.logout();
         expect(LoginPage.btnSubmit).toBeDisplayed();
         //check that input fields are empty
         expect(await LoginPage.inputUsername).toHaveValue('');
         expect(await LoginPage.inputPassword).toHaveValue('')
         //again login
         await LoginPage.login(testData.validCredentials.username, testData.validCredentials.password);
-        browser.pause(500);
         expect(InventoryPage.inventoryItem).toBeDisplayed();
         expect(HeaderSection.buttonShopCart).toBeDisplayed();
         //check that all items that were added are saved on the Cart page
-        await (await HeaderSection.buttonShopCart).click();
+        await HeaderSection.openCart();
         expect(CartPage.cartItems).toBeElementsArrayOfSize(newBadgeCount);
         for (const title of itemsTitles) {
             expect(await CartPage.getCartItemByTitle(title)).toBeDisplayed();
@@ -146,23 +140,19 @@ describe('Work with cards', () => {
     it('Sorting', async () => {
         await expect(InventoryPage.titleProducts).toBeDisplayed();
         //sort with 'a-z' filter
-        (await InventoryPage.selectSortOption(testData.filters.az)).click();
-        await browser.pause(500); 
+        await InventoryPage.selectSortOption(testData.filters.az);
         titles = await InventoryPage.getItemTitles();
         expect(isAscending(titles)).toBe(true);
         //sort with 'z-a' filter
-        (await InventoryPage.selectSortOption(testData.filters.za)).click();
-        await browser.pause(500); 
+        await InventoryPage.selectSortOption(testData.filters.za);
         titles = await InventoryPage.getItemTitles();
         expect(isDescending(titles)).toBe(true);
         //sort with 'li-ho' filter
-        (await InventoryPage.selectSortOption(testData.filters.lohi)).click();
-        await browser.pause(500); 
+        await InventoryPage.selectSortOption(testData.filters.lohi); 
         prices = await InventoryPage.getItemPrices();
         expect(isAscendingPrice(prices)).toBe(true);
         //sort with 'hi-lo' filter
-        (await InventoryPage.selectSortOption(testData.filters.hilo)).click();
-        await browser.pause(500); 
+        await InventoryPage.selectSortOption(testData.filters.hilo); 
         prices = await InventoryPage.getItemPrices();
         expect(isDescendingPrice(prices)).toBe(true);
     });
@@ -185,25 +175,26 @@ describe('Work with cards', () => {
         const initialBadgeCount = await HeaderSection.getBadgeCount();
         //loop for add items to cart and sum the price
         for (const index of indexesToAdd) {
-            await (await InventoryPage.buttonAddToCart(index)).click();
+            await InventoryPage.addToCart(index);
             const productTitle = await InventoryPage.getItemTitle(index);
-            itemsTitles.push(await productTitle.getText());
+            const titleText = await productTitle.getText();
+            itemsTitles.push(titleText);
             const productPriceElement = await InventoryPage.getItemPrice(index);
             const productPriceText = await productPriceElement.getText();
-            const productPrice = parseFloat(productPriceText.replace('$', '').trim()); 
-            totalPriceSum += productPrice; 
+            const productPrice = parseFloat(productPriceText.replace('$', '').trim());
+            totalPriceSum += productPrice;
         }
         //check that number of items near to "Cart" button is right
         const newBadgeCount = await HeaderSection.getBadgeCount();
         expect(newBadgeCount).toEqual(initialBadgeCount + indexesToAdd.length);
         //check that on the Cart page all items that we added are present
-        await (await HeaderSection.buttonShopCart).click();
+        await HeaderSection.openCart();
         expect(CartPage.cartItems).toBeElementsArrayOfSize(newBadgeCount);
         for (const title of itemsTitles) {
             expect(await CartPage.getCartItemByTitle(title)).toBeDisplayed();
         }
 
-        (await CartPage.checkoutButton).click();
+        await CartPage.createCheckout();
         expect(CheckoutPage.chekoutForm).toBeDisplayed();
         //check inputs on the Checkout Page
         await CheckoutPage.setFirstName(testData.userCheckoutInfo.firstname);
@@ -215,7 +206,7 @@ describe('Work with cards', () => {
         await CheckoutPage.setPostalCode(testData.userCheckoutInfo.postalCode);
         expect(CheckoutPage.firstNameInput).toHaveValue(testData.userCheckoutInfo.postalCode);
 
-        (await CheckoutPage.continueButton).click();
+        await CheckoutPage.countinue();
         expect(OverviewPage.overviewTitle).toBeDisplayed();
         expect(OverviewPage.cartItems).toBeElementsArrayOfSize(indexesToAdd.length);
         //check that on the Overview page all items that we added are present
@@ -225,11 +216,11 @@ describe('Work with cards', () => {
         const overviewTotalPrice = await OverviewPage.totalPrice();  
         expect(overviewTotalPrice).toEqual(totalPriceSum); 
 
-        (await OverviewPage.finishButton).click();
+        await OverviewPage.finishOrder();
         expect(CheckoutCompletePage.checkoutCompleteTitle).toBeDisplayed();
         expect(CheckoutCompletePage.thankOrderMessage).toBeDisplayed();
         //check that after creating order that in our cart are no items
-        (await CheckoutCompletePage.backHomeButton).click();
+        await CheckoutCompletePage.backHome();
         expect(InventoryPage.titleProducts).toBeDisplayed();
         expect(await HeaderSection.buttonBadge.isExisting()).toBe(false);
     });
@@ -237,12 +228,12 @@ describe('Work with cards', () => {
     xit('Checkout without products', async () => {
         await expect(InventoryPage.titleProducts).toBeDisplayed();
 
-        await HeaderSection.buttonShopCart.click();
+        await HeaderSection.openCart();
 
         const cartItemsExist = await CartPage.cartItems.isExisting();
         await expect(cartItemsExist).toBe(false);
 
-        await CartPage.checkoutButton.click();
+        await CartPage.createCheckout();
 
         await expect(CartPage.cartTitle).toBeDisplayed();
         await expect(CartPage.messageCartIsEmpty).toBeDisplayed();

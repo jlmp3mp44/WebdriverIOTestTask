@@ -23,6 +23,10 @@ class CartPage extends Page {
     async getCartItemByTitle(title) {
         return $(`//div[@class="inventory_item_name" and text()="${title}"]`);
     }
+
+    async createCheckout(){
+        (await this.checkoutButton).click();
+    }
     
     open () {
         return browser.url('cart.html') ;

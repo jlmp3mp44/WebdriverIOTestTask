@@ -14,6 +14,10 @@ class CheckoutCompletePage extends Page {
     get backHomeButton(){
         return $('[data-test=back-to-products]');
     }
+
+    async backHome(){
+        (await this.backHomeButton).click();
+    }
     
     open () {
         return browser.url('checkout-complete.html')

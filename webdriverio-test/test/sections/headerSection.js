@@ -28,6 +28,19 @@ class HeaderSection {
         return 0;
     }
 
+    async openMenu(){
+        await this.buttonMenu.click();
+    }
+
+    async logout(){
+        (await this.logoutButton).click();
+        browser.pause(500);
+    }
+
+    async openCart(){
+        (await this.buttonShopCart).click();
+    }
+    
     open () {
         return browser.url('inventory.html') ;
     }

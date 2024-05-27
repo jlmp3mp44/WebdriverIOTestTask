@@ -19,6 +19,11 @@ class LoginPage extends Page {
         return $('[data-test = "error"]')
     }
 
+    async submit(){
+    await this.btnSubmit.click();
+    await browser.pause(500);
+    }
+
     //get error icon near to inputs
     async getUsernameErrorIcon() {
         return this.inputUsername.$('~ svg.error_icon');
@@ -48,6 +53,7 @@ class LoginPage extends Page {
         await this.setUsername(username);
         await this.setPassword(password);
         await this.btnSubmit.click();
+        await browser.pause(500);
     }
 
 

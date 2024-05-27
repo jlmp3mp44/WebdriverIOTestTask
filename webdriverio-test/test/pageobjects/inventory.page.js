@@ -20,8 +20,14 @@ class InventoryPage extends Page {
     }
     
     // get button "add to cart" for specific item
-    async buttonAddToCart(index){
-        return $(`(//button[contains(@data-test, 'add-to-cart')])[${index}]`);
+    async addToCart(index) {
+        const button = $(`(//button[contains(@data-test, 'add-to-cart')])[${index}]`);
+        if (await button.isDisplayed()) {
+            await button.click();
+            console.log(`CLICKED ON THE BUUTON ADD TO CART ${index}`);
+        } else {
+            console.log(`Add to cart button at index: ${index} is not displayed`);
+        }
     }
 
     // get title of specific item
@@ -68,7 +74,8 @@ class InventoryPage extends Page {
     async selectSortOption(value) {
         await this.sortContainer.click();
         const optionElement = await $(`.product_sort_container option[value="${value}"]`);
-        return optionElement;
+        await optionElement.click();
+        await browser.pause(500); 
     }
 
     open () {

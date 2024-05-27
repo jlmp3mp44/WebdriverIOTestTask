@@ -34,6 +34,10 @@ class CheckoutPage extends Page {
     async setPostalCode(postalCode){
         await this.postalCodeInput.setValue(postalCode);
     }
+
+    async countinue(){
+        (await this.continueButton).click();
+    }
     
     
     open () {
