@@ -1,6 +1,6 @@
-const Page = require('./page');
+const page = require('./page');
 
-class OverviewPage extends Page {
+class OverviewPage extends page {
 
     get overviewTitle(){
         return $('//span[contains(text(), "Overview")]');

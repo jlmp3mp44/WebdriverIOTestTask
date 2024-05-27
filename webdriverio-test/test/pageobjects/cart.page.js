@@ -1,6 +1,6 @@
-const Page = require('./page');
+const page = require('./page');
 
-class CartPage extends Page {
+class CartPage extends page {
     
     get cartTitle(){
         return $('//span[contains(text(), "Cart")]');

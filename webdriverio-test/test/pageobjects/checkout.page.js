@@ -1,6 +1,6 @@
-const Page = require('./page');
+const page = require('./page');
 
-class CheckoutPage extends Page {
+class CheckoutPage extends page {
   
     get chekoutForm(){
         return $('//div[@class="checkout_info"]');

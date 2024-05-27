@@ -1,6 +1,6 @@
-const Page = require('./page');
+const page = require('./page');
 
-class InventoryPage extends Page {
+class InventoryPage extends page {
 
     get titleProducts () {
         return  $('[data-test="title"]');

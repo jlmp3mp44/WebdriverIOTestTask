@@ -1,6 +1,6 @@
-const Page = require('./page');
+const page = require('./page');
 
-class LoginPage extends Page {
+class LoginPage extends page {
 
     get inputUsername () {
         return $('[data-test="username"]');

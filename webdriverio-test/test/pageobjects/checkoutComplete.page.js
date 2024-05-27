@@ -1,6 +1,6 @@
-const Page = require('./page');
+const page = require('./page');
 
-class CheckoutCompletePage extends Page {
+class CheckoutCompletePage extends page {
 
     get checkoutCompleteTitle(){
         return $('//span[contains(text(), "Complete")]');
