@@ -24,14 +24,15 @@ function isDescendingPrice(arr) {
     return isSorted(arr, (a, b) => b - a);
 }
 
-function checkSocialMedia(button, expectedUrl, expectedElementSelector) {
-    button.click();
-    browser.pause(500);
-    browser.switchWindow(expectedUrl);
-    expect(browser).toHaveUrl(expectedUrl);
-    expect(browser.$(expectedElementSelector)).toBeDisplayed();
-    browser.switchWindow("");
+async function checkSocialMedia(button, expectedUrl, expectedElementSelector) {
+    await button.click();
+    await browser.pause(500);
+    await browser.switchWindow(expectedUrl);
+    await expect(browser).toHaveUrl(expectedUrl);
+    await expect(browser.$(expectedElementSelector)).toBeDisplayed();
+    await browser.switchWindow("");  // Switch back to the original window
 }
+
 
 module.exports = {
     isAscending,
