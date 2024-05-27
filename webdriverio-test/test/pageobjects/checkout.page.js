@@ -1,4 +1,3 @@
-const { $ } = require('@wdio/globals')
 const Page = require('./page');
 
 class CheckoutPage extends Page {
