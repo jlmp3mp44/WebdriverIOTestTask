@@ -18,14 +18,9 @@ describe('E-commerce Cart Operations', () => {
 
     afterEach(async () => {
         await inventoryPage.open();
-        const removeButtons = await inventoryPage.removeButton;
-        // click on the buttons "Remove form cart" after each test
-        if (removeButtons.length > 0) {
-            for (const removeButton of removeButtons) {
-                if (await removeButton.isDisplayed()) {
-                    await removeButton.click();
-                }
-            }
+        const lenght = await inventoryPage.removeButtons.length;
+        for(let i =0; i<= lenght; i++){
+           await inventoryPage.clickRemoveButton();
         }
     });
 

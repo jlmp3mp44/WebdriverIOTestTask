@@ -14,10 +14,25 @@ class InventoryPage extends page {
         return $('.product_sort_container');
     }
     
-    get removeButton(){
-        return $$('[data-test*=remove]');
+    get removeButtons(){
+        return $$(`(//*[contains(@data-test, 'remove')])`);
     }
-    
+    async clickRemoveButtons() {
+        const removeButtons = this.removeButtons;
+        if (removeButtons.length > 0) {
+            for (const removeButton of removeButtons) {
+                if (await removeButton.isDisplayed()) {
+                    await removeButton.click();
+                }
+            }
+        }
+    }
+    async clickRemoveButton(){
+        const button = $(`(//*[contains(@data-test, 'remove')])[1]`);
+        if (await button.isDisplayed()) {
+            await button.click();
+        }
+    }
     // get button "add to cart" for specific item
     async addToCart(index) {
         const button = $(`(//button[contains(@data-test, 'add-to-cart')])[${index}]`);
