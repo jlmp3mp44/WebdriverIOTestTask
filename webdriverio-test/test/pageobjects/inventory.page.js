@@ -16,16 +16,7 @@ class InventoryPage extends page {
   get removeButtons() {
     return $$(`(//*[contains(@data-test, 'remove')])`);
   }
-  async clickRemoveButtons() {
-    const removeButtons = this.removeButtons;
-    if (removeButtons.length > 0) {
-      for (const removeButton of removeButtons) {
-        if (await removeButton.isDisplayed()) {
-          await removeButton.click();
-        }
-      }
-    }
-  }
+  //use selector with index [1] because when we click on "remove" the next one "remove" will have index [1]
   async clickRemoveButton() {
     const button = $(`(//*[contains(@data-test, 'remove')])[1]`);
     if (await button.isDisplayed()) {
@@ -43,7 +34,6 @@ class InventoryPage extends page {
       console.log(`Add to cart button at index: ${index} is not displayed`);
     }
   }
-
   // get title of specific item
   async getItemTitle(index) {
     return $(`(//*[@data-test="inventory-item-name"])[${index}]`);
@@ -87,9 +77,7 @@ class InventoryPage extends page {
   //get specific sort option
   async selectSortOption(value) {
     await this.sortContainer.click();
-    const optionElement = await $(
-      `.product_sort_container option[value="${value}"]`
-    );
+    const optionElement = await $(`.product_sort_container option[value="${value}"]`);
     await optionElement.click();
     await browser.pause(500);
   }
