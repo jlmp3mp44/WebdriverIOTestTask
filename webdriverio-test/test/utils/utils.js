@@ -29,7 +29,7 @@ async function checkSocialMedia(button, expectedUrl, expectedElementSelector) {
   await browser.switchWindow(expectedUrl);
   await expect(browser).toHaveUrl(expectedUrl);
   await expect(browser.$(expectedElementSelector)).toBeDisplayed();
-  await browser.switchWindow(""); // Switch back to the original window
+  await browser.switchWindow("");  // Switch back to the original window
 }
 
 module.exports = {
