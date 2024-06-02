@@ -14,7 +14,7 @@ class LoginPage extends page {
   }
 
   get errorMessage() {
-    return $('[data-test = "error"]');
+    return $('//h3[text() = "Epic sadface: Username is required"]');
   }
 
   async submit() {
