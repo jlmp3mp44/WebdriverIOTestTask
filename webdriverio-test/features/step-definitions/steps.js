@@ -9,6 +9,7 @@ Given(
   /^I'm located on the "(.+)" page of saucedemo website$/,
   async (pageName) => {
     const page = pages[pageName];
+    await page.open();
   }
 );
 
