@@ -22,9 +22,7 @@ exports.config = {
     // The path of the spec files will be resolved relative from the directory of
     // of the config file unless it's absolute.
     //
-    specs: [
-        './test/specs/**/*.js'
-    ],
+
     // Patterns to exclude.
     exclude: [
         // 'path/to/excluded/files'
@@ -111,7 +109,26 @@ exports.config = {
     //
     // Make sure you have the wdio adapter package for the specific framework installed
     // before running any tests.
-    framework: 'mocha',
+    framework: 'cucumber',
+    cucumberOpts: {
+        require: ['./features/step-definitions/steps.js'], // Path to your step definitions
+        backtrace: false,   // <boolean> show full backtrace for errors
+        requireModule: [],  // <string[]> require additional modules
+        dryRun: false,      // <boolean> invoke formatters without executing steps
+        failFast: false,    // <boolean> abort the run on first failure
+        format: ['pretty'], // <string[]> (type[:path]) specify the output format, optionally supply PATH to redirect formatter output (repeatable)
+        colors: true,       // <boolean> disable colors in formatter output
+        snippets: true,     // <boolean> hide step definition snippets for pending steps
+        source: true,       // <boolean> hide source uris
+        profile: [],        // <string[]> (name) specify the profile to use
+        strict: false,      // <boolean> fail if there are any undefined or pending steps
+        tagExpression: '',  // <string> (expression) only execute the features or scenarios with tags matching the expression
+        timeout: 20000,     // <number> timeout for step definitions
+        ignoreUndefinedDefinitions: false // <boolean> Enable this config to treat undefined definitions as warnings.
+    },
+    specs: [
+        './features/login.feature' // Path to your feature files
+    ],
     
     //
     // The number of times to retry the entire specfile when it fails as a whole
