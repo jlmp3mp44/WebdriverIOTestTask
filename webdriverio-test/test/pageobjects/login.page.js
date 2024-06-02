@@ -17,10 +17,6 @@ class LoginPage extends page {
     return $('//h3[text() = "Epic sadface: Username is required"]');
   }
 
-  async getMessageByText(text) {
-    return $(`//h3[text()='${text}']`);
-  }
-
   async submit() {
     await this.btnSubmit.click();
     await browser.pause(500);
@@ -66,6 +62,10 @@ class LoginPage extends page {
 
   async getButtonByText(buttonText) {
     return $(`//*[@id='login-button' and @value="${buttonText}"]`); 
+  }
+
+  async getMessageByText(text) {
+    return $(`//h3[text()='${text}']`);
   }
 
   open() {
