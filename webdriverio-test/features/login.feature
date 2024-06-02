@@ -8,10 +8,7 @@ Scenario: Try to login without login and password
     Given I'm located on the "login" page of saucedemo website
     When I click "Login" button
     Then I should see "Epic sadface: Username is required" error message
-
-Examples:
-    | message                             |
-    | Epic sadface: Username is required  |
+    
 
 
 
