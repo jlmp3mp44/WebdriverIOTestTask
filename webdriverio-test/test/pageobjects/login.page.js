@@ -17,6 +17,10 @@ class LoginPage extends page {
     return $('//h3[text() = "Epic sadface: Username is required"]');
   }
 
+  async getMessageByText(text) {
+    return $(`//h3[text()='${text}']`);
+  }
+
   async submit() {
     await this.btnSubmit.click();
     await browser.pause(500);
@@ -52,6 +56,16 @@ class LoginPage extends page {
     await this.setPassword(password);
     await this.btnSubmit.click();
     await browser.pause(500);
+  }
+  
+  async clickButtonByText(buttonText) {
+    const button = await this.getButtonByText(buttonText);
+    await button.click();
+    await browser.pause(500);
+  }
+
+  async getButtonByText(buttonText) {
+    return $(`//*[@id='login-button' and @value="${buttonText}"]`); 
   }
 
   open() {
